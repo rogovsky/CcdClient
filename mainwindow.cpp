@@ -8,6 +8,7 @@
 #include <QFileDialog>
 #include <QIODevice>
 #include <QTextStream>
+#include <QApplication>
 
 
 #include <tango.h>
@@ -95,6 +96,7 @@ void MainWindow::retranslateUI() {
 
 void MainWindow::exit() {
     std::cout << "exit()" << std::endl;
+	QApplication::quit();
 }
 
 void MainWindow::toolBarAddDevice() {

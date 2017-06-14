@@ -1,6 +1,8 @@
 #include "centralwidget.h"
 #include "ui_CentralWidget.h"
 #include <QFileDialog>
+#include <QRgb>
+#include <QString>
 
 CentralWidget::CentralWidget(QWidget *parent) :
     QWidget(parent),
@@ -14,7 +16,12 @@ CentralWidget::~CentralWidget() {
     if (widgets.size() > 0) {
         for (QString key : widgets.keys()) {
             for (ImageWidget *widget : widgets[key]) {
-                widgets[key].removeOne(widget);
+#if QT_VERSION >= 0x050400
+				widgets[key].removeOne(widget);
+#else
+				int i = widgets[key].indexOf(widget);
+				widgets[key].remove(i);
+#endif
                 delete widget;
             }
             widgets.remove(key);
@@ -109,15 +116,24 @@ void CentralWidget::getFullImageSlot(ImageWidget* widget) {
 		emit getFullImage(widget->getName());
 }
 
-void CentralWidget::saveFullImageToFile(QString devName, std::vector<unsigned char> image, int width, int height) {
+void CentralWidget::saveFullImageToFile(QString devName, std::vector<unsigned char> image, int width, int height) {	
 	QString fileName = QFileDialog::getSaveFileName(NULL,
 													tr("Save File"),
-													QString("~/image.png"),
+													QString("~/").append(devName).append(QString(".png")),
 													tr("*.png (*.png);;*.bmp (*.bmp);;*.jpg (*.jpg)"));
 	if (fileName != "") {
 		QString upperCase = fileName.toUpper();
 
+#if QT_VERSION >= 0x050400
 		QImage qimage(image.data(), width, height, QImage::Format_Grayscale8);
+#else
+		QImage qimage(width, height, QImage::Format_RGB888)
+		for (int j = 0; j < height; j++) {
+			for (int i = 0; i < width; i++) {
+				qimage.setPixelColor(i, j, QColor(image[width * j + i], image[width * j + i], image[width * j + i]));
+			}
+		}
+#endif
 		if (upperCase.endsWith(".PNG")) {
 			qimage.save(fileName, "PNG");
 		} else if (upperCase.endsWith(".JPG")) {
