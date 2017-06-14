@@ -11,6 +11,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = CcdClient
 TEMPLATE = app
 
+CONFIG += link_pkgconfig
+PKGCONFIG += tango libjpeg
 
 SOURCES += main.cpp\
 	mainwindow.cpp \
@@ -31,12 +33,13 @@ HEADERS  += mainwindow.h \
     DataReceiver.h \
     DeviceType.h
 
-LIBS += /usr/local/lib/libtango.so
-LIBS += /usr/lib/libomniORB4.so
-LIBS += /usr/lib/libomnithread.so
-LIBS += -L/usr/lib -ljpeg
+#LIBS += /usr/local/lib/libtango.so
+#LIBS += /usr/lib/libomniORB4.so
+#LIBS += /usr/lib/libomnithread.so
+#LIBS += -L/usr/lib -ljpeg
+LIBS += -L/usr/lib/tango
 
-INCLUDEPATH += /usr/local/include/tango
+INCLUDEPATH += /usr/include/tango
 INCLUDEPATH += /usr/local/omniORB4
 INCLUDEPATH += /usr/local/omnithread
 

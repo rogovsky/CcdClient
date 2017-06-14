@@ -32,7 +32,7 @@ private:
 
 
 public:
-    void push_event(Tango::PipeEventData *ped);
+//    void push_event(Tango::PipeEventData *ped);
     void push_event(Tango::DataReadyEventData *dred);
 
     explicit DataReceiver(QObject *parent = Q_NULLPTR);

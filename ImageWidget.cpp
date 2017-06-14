@@ -67,22 +67,22 @@ void ImageWidget::drawMeasurements(QPainter &painter, int x0, int y0, double cX,
 
     //QPen pen(Qt::white, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
 
-    QPen mesurementsPen(QColor(168, 0, 255), 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+    QPen mesurementsPen(QColor(168, 0, 255), 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
 	//QPen textPen(QColor(140, 140, 140), 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
     painter.setPen(mesurementsPen);
 
 
     painter.save();
-	painter.translate(QPoint(x0 + cX, y0 + cY));
+	painter.translate(QPoint(x0 + (int)(cX + 0.5), y0 + (int)(cY + 0.5)));
 	painter.rotate(phi);
 
     painter.setPen(mesurementsPen);
     //cout << cX << " " << cY << " " << sX << " " << sY << " " << phi << endl;
 
-	painter.drawEllipse(-sX, -sY, 2 * sX, 2 * sY);
+	painter.drawEllipse(-(int)(sX), -(int)(sY), (int)(2 * sX + 0.5), (int)(2 * sY + 0.5));
 
-//    painter.drawLine(-(int)sX, 0, (int)sX, 0);
-//    painter.drawLine(0, -(int)sY, 0, (int)sY);
+    painter.drawLine(-(int)(sX + 0.5), 0, (int)(sX + 0.5), 0);
+    painter.drawLine(0, -(int)(sY + 0.5), 0, (int)(sY + 0.5));
 //    painter.drawLine(-(int)sX, -5, -(int)sX, 5);
 //	painter.drawLine((int)sX, -5, (int)sX, 5);
 //    painter.drawLine(-5, -(int)sY, 5, -(int)sY);
@@ -106,8 +106,8 @@ void ImageWidget::paintEvent(QPaintEvent *e) {
 
     QPainter painter;
     painter.begin(this);
-    painter.fillRect(0, 0, thisWidth, thisHeight, Qt::black);
-    QPen pen(QColor(140, 140, 140), 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+    painter.fillRect(0, 0, thisWidth, thisHeight, Qt::gray);
+    QPen pen(QColor(255, 255, 255), 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
     QPen mesurementsPen(QColor(168, 0, 255), 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
 
     double cX, cY;
@@ -176,6 +176,7 @@ void ImageWidget::paintEvent(QPaintEvent *e) {
 		fpsCurr = 0;
 	}
 
+#if QT_VERSION >= 0x050500
     painter.setFont(QFont("Ubuntu-mono", 8, QFont::Bold));
     painter.drawText(10, 15, QString::asprintf("fps = %.1f", fps));
 	painter.drawText(10, 27, QString::asprintf("x = %.1f", X));
@@ -183,6 +184,17 @@ void ImageWidget::paintEvent(QPaintEvent *e) {
 	painter.drawText(10, 51, QString::asprintf("a = %.1f", A));
 	painter.drawText(10, 63, QString::asprintf("b = %.1f", B));
 	painter.drawText(10, 75, QString::asprintf("phi = %.1f", Phi));
+#else
+    painter.drawText(10, 15, QString("fps = %1").arg(fps));
+    painter.drawText(10, 27, QString("x = %1").arg(X));
+    painter.drawText(10, 39, QString("y = %1").arg(Y));
+    painter.drawText(10, 51, QString("a = %1").arg(A));
+    painter.drawText(10, 63, QString("b = %1").arg(B));
+    painter.drawText(10, 75, QString("phi = %1").arg(Phi));
+#endif
+
+
+
 
     QFrame::paintEvent(e);
     updateMutex.unlock();

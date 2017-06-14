@@ -127,10 +127,10 @@ void CentralWidget::saveFullImageToFile(QString devName, std::vector<unsigned ch
 #if QT_VERSION >= 0x050400
 		QImage qimage(image.data(), width, height, QImage::Format_Grayscale8);
 #else
-		QImage qimage(width, height, QImage::Format_RGB888)
+		QImage qimage(width, height, QImage::Format_RGB888);
 		for (int j = 0; j < height; j++) {
 			for (int i = 0; i < width; i++) {
-				qimage.setPixelColor(i, j, QColor(image[width * j + i], image[width * j + i], image[width * j + i]));
+				qimage.setPixel(i, j, qRgb(image[width * j + i], image[width * j + i], image[width * j + i]));
 			}
 		}
 #endif

@@ -330,57 +330,57 @@ void DataReceiver::setAttribute(QString devName, Tango::DeviceAttribute attribut
 	}
 }
 
-void DataReceiver::push_event(Tango::PipeEventData *ped) {
-	try {
-		Tango::DeviceProxy *device = ped->device;
+// void DataReceiver::push_event(Tango::PipeEventData *ped) {
+// 	try {
+// 		Tango::DeviceProxy *device = ped->device;
 
-		Tango::DevicePipe *pipe = ped->pipe_value;
+// 		Tango::DevicePipe *pipe = ped->pipe_value;
 
-		QHash<QString, Tango::DeviceAttribute> attrHash;
+// 		QHash<QString, Tango::DeviceAttribute> attrHash;
 
-		for (unsigned int i = 0; i < pipe->get_data_elt_nb(); i++) {
-			std::string str = pipe->get_data_elt_name(i);
+// 		for (unsigned int i = 0; i < pipe->get_data_elt_nb(); i++) {
+// 			std::string str = pipe->get_data_elt_name(i);
 
-			int type = pipe->get_data_elt_type(i);
+// 			int type = pipe->get_data_elt_type(i);
 
-			switch (type) {
-			case Tango::DEV_DOUBLE: {
-				double val1;
-				(*pipe)[str] >> val1;
+// 			switch (type) {
+// 			case Tango::DEV_DOUBLE: {
+// 				double val1;
+// 				(*pipe)[str] >> val1;
 
-				Tango::DeviceAttribute attr(str, val1);
-				attrHash[QString(str.data())] = attr;
-				break;
-			}
-			case Tango::DEV_BOOLEAN: {
-				bool val2;
-				(*pipe)[str] >> val2;
-				Tango::DeviceAttribute attr(str, val2);
-				attrHash[QString(str.data())] = attr;
-				break;
-			}
-			case Tango::DEV_LONG: {
-				int val3;
-				(*pipe)[str] >> val3;
-				Tango::DeviceAttribute attr(str, val3);
-				attrHash[QString(str.data())] = attr;
-				break;
-			}
-			case Tango::DEVVAR_CHARARRAY: {
-				std::vector<unsigned char> val4;
-				(*pipe)[str] >> val4;
-				Tango::DeviceAttribute attr(str, val4);
-				attrHash[QString(str.data())] = attr;
-				break;
-			}
-			}
-		}
-		if (attrHash.size() > 0)
-			emit updateData(devices.key(device), attrHash);
-	} catch(Tango::DevFailed) {
-		std::cout << "dev failed" << std::endl;
-	}
-}
+// 				Tango::DeviceAttribute attr(str, val1);
+// 				attrHash[QString(str.data())] = attr;
+// 				break;
+// 			}
+// 			case Tango::DEV_BOOLEAN: {
+// 				bool val2;
+// 				(*pipe)[str] >> val2;
+// 				Tango::DeviceAttribute attr(str, val2);
+// 				attrHash[QString(str.data())] = attr;
+// 				break;
+// 			}
+// 			case Tango::DEV_LONG: {
+// 				int val3;
+// 				(*pipe)[str] >> val3;
+// 				Tango::DeviceAttribute attr(str, val3);
+// 				attrHash[QString(str.data())] = attr;
+// 				break;
+// 			}
+// 			case Tango::DEVVAR_CHARARRAY: {
+// 				std::vector<unsigned char> val4;
+// 				(*pipe)[str] >> val4;
+// 				Tango::DeviceAttribute attr(str, val4);
+// 				attrHash[QString(str.data())] = attr;
+// 				break;
+// 			}
+// 			}
+// 		}
+// 		if (attrHash.size() > 0)
+// 			emit updateData(devices.key(device), attrHash);
+// 	} catch(Tango::DevFailed) {
+// 		std::cout << "dev failed" << std::endl;
+// 	}
+// }
 
 QTime t;
 void DataReceiver::push_event(Tango::DataReadyEventData *dred) {
@@ -453,7 +453,7 @@ QJsonObject DataReceiver::getDeviceState(QString devName) {
 				jobj.insert(name, QJsonValue(attr.BooleanSeq[0]));
 				break;
 			case 3:
-				jobj.insert(name, QJsonValue(attr.LongSeq[0]));
+				jobj.insert(name, QJsonValue( static_cast<int>(attr.LongSeq[0]) ));
 				break;
 			case 5:
 				jobj.insert(name, QJsonValue(attr.DoubleSeq[0]));
@@ -475,7 +475,7 @@ QJsonObject DataReceiver::getDeviceState(QString devName) {
 					jobj.insert(name, QJsonValue(attr.BooleanSeq[0]));
 					break;
 				case 3:
-					jobj.insert(name, QJsonValue(attr.LongSeq[0]));
+					jobj.insert(name, QJsonValue( static_cast<int>(attr.LongSeq[0]) ));
 					break;
 				case 5:
 					jobj.insert(name, QJsonValue(attr.DoubleSeq[0]));
