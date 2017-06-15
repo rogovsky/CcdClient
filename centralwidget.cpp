@@ -57,6 +57,7 @@ void CentralWidget::addImageWidget(QString devName, DeviceType type) {
             this, SLOT(changeAttribute(QString,Tango::DeviceAttribute)));
     connect(widget, SIGNAL(play(QString)), this, SLOT(playProxy(QString)));
     connect(widget, SIGNAL(pause(QString)), this, SLOT(pauseProxy(QString)));
+	connect(widget, SIGNAL(setExposure(QString)), this, SLOT(setExposureProxy(QString)));
 	connect(widget, SIGNAL(close(ImageWidget *)), this, SLOT(closeDeviceProxy(ImageWidget *)));
 	connect(widget, SIGNAL(saveImage(ImageWidget*)), this, SLOT(getFullImageSlot(ImageWidget*)));
 

@@ -64,11 +64,8 @@ ImageWidget::~ImageWidget()
 }
 
 void ImageWidget::drawMeasurements(QPainter &painter, int x0, int y0, double cX, double cY, double sX, double sY, double phi) {
-
-    //QPen pen(Qt::white, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
-
-    QPen mesurementsPen(QColor(168, 0, 255), 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
-	//QPen textPen(QColor(140, 140, 140), 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+//	QPen mesurementsPen(QColor(168, 0, 255), 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+	QPen mesurementsPen(QColor(0, 0, 0), 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
     painter.setPen(mesurementsPen);
 
 
@@ -76,17 +73,12 @@ void ImageWidget::drawMeasurements(QPainter &painter, int x0, int y0, double cX,
 	painter.translate(QPoint(x0 + (int)(cX + 0.5), y0 + (int)(cY + 0.5)));
 	painter.rotate(phi);
 
-    painter.setPen(mesurementsPen);
-    //cout << cX << " " << cY << " " << sX << " " << sY << " " << phi << endl;
+	painter.setPen(mesurementsPen);
 
 	painter.drawEllipse(-(int)(sX), -(int)(sY), (int)(2 * sX + 0.5), (int)(2 * sY + 0.5));
 
-    painter.drawLine(-(int)(sX + 0.5), 0, (int)(sX + 0.5), 0);
-    painter.drawLine(0, -(int)(sY + 0.5), 0, (int)(sY + 0.5));
-//    painter.drawLine(-(int)sX, -5, -(int)sX, 5);
-//	painter.drawLine((int)sX, -5, (int)sX, 5);
-//    painter.drawLine(-5, -(int)sY, 5, -(int)sY);
-//	painter.drawLine(-5, (int)sY, 5, (int)sY);
+//	painter.drawLine(-(int)(sX + 0.5), 0, (int)(sX + 0.5), 0);
+//	painter.drawLine(0, -(int)(sY + 0.5), 0, (int)(sY + 0.5));
 
 	painter.restore();
 }
@@ -111,12 +103,10 @@ void ImageWidget::paintEvent(QPaintEvent *e) {
     QPen mesurementsPen(QColor(168, 0, 255), 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
 
     double cX, cY;
-    double sX, sY;
-    double phi;
+	double sX, sY;
 
-    if (image.isNull()) {
-        QString str = "Image is null";
-        painter.drawText(thisWidth / 2, thisHeight / 2, str);
+	if (image.isNull()) {
+		painter.drawText(thisWidth / 2, thisHeight / 2, "Image is null");
     } else {
 
         if ((float)thisWidth / (float)thisHeight > (float)imageWidth / (float)imageHeight) {
@@ -132,7 +122,6 @@ void ImageWidget::paintEvent(QPaintEvent *e) {
 			cY = (Y / (double)imageHeight * (double)thisHeight) * scale;
 			sX = (A / (double)imageHeight * (double)thisHeight) * scale;
 			sY = (B / (double)imageHeight * (double)thisHeight) * scale;
-			phi = Phi;
 
 			if (sX != 0 && sY != 0) {
 				painter.save();
@@ -155,7 +144,6 @@ void ImageWidget::paintEvent(QPaintEvent *e) {
 			cY = (int)(Y / (double)imageWidth * (double)thisWidth) * scale;
 			sX = (int)(A / (double)imageWidth * (double)thisWidth) * scale;
 			sY = (int)(B / (double)imageWidth * (double)thisWidth) * scale;
-			phi = Phi;
 			if (sX != 0 && sY != 0) {
 				painter.save();
 				drawMeasurements(painter, x0, y0, cX, cY, sX, sY, Phi);
@@ -211,8 +199,6 @@ void ImageWidget::setAttributes(QString devName, QHash<QString, Tango::DeviceAtt
 		scale = data["scale"].DoubleSeq[0];
 		fpsDev = data["frameRate"].DoubleSeq[0];
 
-		//cout << scale << endl;
-
 		imageWidth = data["imageWidth"].LongSeq[0];
 		imageHeight = data["imageHeight"].LongSeq[0];
 
@@ -257,6 +243,8 @@ void ImageWidget::showContextMenu(const QPoint& pos) {
     else
         menu.addAction(QPixmap(QStringLiteral("/usr/share/icons/gnome/24x24/actions/player_pause.png")), "Pause", this, SLOT(contextPause()));
 
+	menu.addAction(QPixmap(QStringLiteral("/usr/share/icons/gnome/24x24/categories/preferences-system.png")), "Set exposure", this, SLOT(contextSetExposure()));
+
     menu.addAction(QPixmap(QStringLiteral("/usr/share/icons/gnome/24x24/actions/edit-delete.png")), "Close device", this, SLOT(contextClose()));
 
     menu.addAction(QPixmap(QStringLiteral("/usr/share/icons/gnome/256x256/categories/preferences-system.png")), "Properties", this, SLOT(showPropertiesDialog()));
@@ -276,6 +264,10 @@ void ImageWidget::contextPlay() {
 void ImageWidget::contextPause() {
     played = false;
     emit pause(name);
+}
+
+void ImageWidget::contextSetExposure() {
+	emit setExposure(name);
 }
 
 void ImageWidget::contextClose() {
@@ -350,3 +342,4 @@ void ImageWidget::resizeEvent(QResizeEvent *event) {
 	Tango::DeviceAttribute attr("scale", _scale);
 	emit attributeChanged(name, attr);
 }
+

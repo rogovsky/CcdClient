@@ -8,11 +8,13 @@
 
 using namespace std;
 
-DataReceiver::DataReceiver(QObject *parent) : QThread(parent){
-
+DataReceiver::DataReceiver(QObject *parent) : QThread(parent) {
+	this->parent = parent;
 }
 
 DataReceiver::DataReceiver(QVector<QString> devNames, QObject *parent) : QThread(parent) {
+	this->parent = parent;
+
 	bool exception = false;
 	QVector<QString> missingDevices;
 
@@ -51,6 +53,7 @@ DataReceiver::DataReceiver(QVector<QString> devNames, QObject *parent) : QThread
 }
 
 DataReceiver::~DataReceiver() {
+	delete err;
 	for (QString key : devices.keys()) {
 		Tango::DeviceProxy *device = devices[key];
 		devices.remove(key);
@@ -67,77 +70,6 @@ Tango::DeviceProxy * DataReceiver::getDevice(QString devName) {
 	}
 }
 
-/** THREAD **/
-void DataReceiver::run() {
-	QTime t1;
-	while (running) {
-		t1.start();
-
-		if (devices.keys().size() == 0)
-			break;
-
-		globalPlay.lock();
-		mutex.lock();
-
-		/** BEGIN RECIEVING **/
-
-		//data.clear();
-
-		int abc = 0;
-
-		for (QString key : devices.keys()) {
-			if (!playTable[key])
-				continue;
-			try {
-
-				Tango::DeviceProxy * device = devices[key];
-
-
-				//std::cout << "get_attribute_list()" << std::endl;
-				std::vector<std::string>* attrNames = device->get_attribute_list();
-
-				//std::cout << "read_attributes()" << std::endl;
-				std::vector<Tango::DeviceAttribute> *attributes = device->read_attributes(*attrNames);
-
-				QHash<QString,Tango::DeviceAttribute> attrHash;
-				//std::cout << "for()" << std::endl;
-				for (unsigned int i = 0; i < attributes->size(); i++) {
-					Tango::DeviceAttribute& attr = (*attributes)[i];
-					attrHash[QString(attr.get_name().data())] = attr;
-				}
-
-				delete attrNames;
-				delete attributes;
-
-				//data[key] = attrHash;
-				//if (data.size() > 0)
-				emit updateData(key, attrHash);
-
-
-
-			} catch(Tango::CommunicationFailed) {
-				std::cout << "CommunicationFailed" << std::endl;
-				abc++;
-			} catch(Tango::ConnectionFailed) {
-
-			} catch(Tango::DevFailed) {
-				this->closeDevice(key);
-			}
-
-		}
-
-		/** END RECIEVING **/
-
-		/** EMITTING SIGNAL **/
-
-
-		mutex.unlock();
-		globalPlay.unlock();
-
-		std::cout << 1000.0 / (float)t1.elapsed() << std::endl;
-
-	}
-}
 
 /** SLOTS **/
 void DataReceiver::addDevice(QString devName, DeviceType type) {
@@ -172,8 +104,6 @@ void DataReceiver::addDevice(QString devName, DeviceType type) {
 	} catch(Tango::ConnectionFailed) {
 		QString str;
 		str += "Connection failed\n";
-		QErrorMessage* err = new QErrorMessage(NULL);
-		err->setAttribute(Qt::WA_DeleteOnClose);
 		err->showMessage(str);
 	} catch(Tango::EventSystemFailed esf) {
 		QString str;
@@ -181,25 +111,20 @@ void DataReceiver::addDevice(QString devName, DeviceType type) {
 		str += "Device ";
 		str += devName;
 		str += " errors:\n";
-		for (int err = 0; err < esf.errors.length(); err++) {
+		for (unsigned int err = 0; err < esf.errors.length(); err++) {
 			str += QString(esf.errors[err].desc.in());
 			str += "\n";
 		}
-
-		QErrorMessage* err = new QErrorMessage(NULL);
-		err->setAttribute(Qt::WA_DeleteOnClose);
 		err->showMessage(str);
 	} catch(Tango::DevFailed df) {
 		QString str;
 		str += "Device ";
 		str += devName;
 		str += " errors: ";
-		for (int err = 0; err < df.errors.length(); err++) {
+		for (unsigned int err = 0; err < df.errors.length(); err++) {
 			str += QString(df.errors[err].desc.in());
 			str.append('\n');
 		}
-		QErrorMessage* err = new QErrorMessage(NULL);
-		err->setAttribute(Qt::WA_DeleteOnClose);
 		err->showMessage(str);
 	}
 
@@ -297,8 +222,27 @@ void DataReceiver::pause(QString devName) {
 	}
 }
 
+void DataReceiver::setExposure(QString devName) {
+	try {
+		if (devName == "") {
+
+			for (QString key : devices.keys()) {
+				devices[key]->command_inout("setExposure");
+			}
+		} else {
+			if (devices.contains(devName)) {
+				devices[devName]->command_inout("setExposure");
+			}
+		}
+
+		playTable[devName] = false;
+	} catch (Tango::DevFailed) {
+
+	}
+}
+
 void DataReceiver::close() {
-	running = false;
+
 }
 
 void DataReceiver::setAttribute(QString devName, Tango::DeviceAttribute attribute) {
@@ -311,12 +255,10 @@ void DataReceiver::setAttribute(QString devName, Tango::DeviceAttribute attribut
 			str += "Device ";
 			str += devName;
 			str += " errors:\n";
-			for (int err = 0; err < df.errors.length(); err++) {
+			for (unsigned int err = 0; err < df.errors.length(); err++) {
 				str += QString(df.errors[err].desc.in());
 				str += "\n";
 			}
-			QErrorMessage* err = new QErrorMessage(NULL);
-			err->setAttribute(Qt::WA_DeleteOnClose);
 			err->showMessage(str);
 		}
 	} else {
@@ -324,63 +266,9 @@ void DataReceiver::setAttribute(QString devName, Tango::DeviceAttribute attribut
 		str += "Device ";
 		str += devName;
 		str += " not in database.";
-		QErrorMessage* err = new QErrorMessage(NULL);
-		err->setAttribute(Qt::WA_DeleteOnClose);
 		err->showMessage(str);
 	}
 }
-
-// void DataReceiver::push_event(Tango::PipeEventData *ped) {
-// 	try {
-// 		Tango::DeviceProxy *device = ped->device;
-
-// 		Tango::DevicePipe *pipe = ped->pipe_value;
-
-// 		QHash<QString, Tango::DeviceAttribute> attrHash;
-
-// 		for (unsigned int i = 0; i < pipe->get_data_elt_nb(); i++) {
-// 			std::string str = pipe->get_data_elt_name(i);
-
-// 			int type = pipe->get_data_elt_type(i);
-
-// 			switch (type) {
-// 			case Tango::DEV_DOUBLE: {
-// 				double val1;
-// 				(*pipe)[str] >> val1;
-
-// 				Tango::DeviceAttribute attr(str, val1);
-// 				attrHash[QString(str.data())] = attr;
-// 				break;
-// 			}
-// 			case Tango::DEV_BOOLEAN: {
-// 				bool val2;
-// 				(*pipe)[str] >> val2;
-// 				Tango::DeviceAttribute attr(str, val2);
-// 				attrHash[QString(str.data())] = attr;
-// 				break;
-// 			}
-// 			case Tango::DEV_LONG: {
-// 				int val3;
-// 				(*pipe)[str] >> val3;
-// 				Tango::DeviceAttribute attr(str, val3);
-// 				attrHash[QString(str.data())] = attr;
-// 				break;
-// 			}
-// 			case Tango::DEVVAR_CHARARRAY: {
-// 				std::vector<unsigned char> val4;
-// 				(*pipe)[str] >> val4;
-// 				Tango::DeviceAttribute attr(str, val4);
-// 				attrHash[QString(str.data())] = attr;
-// 				break;
-// 			}
-// 			}
-// 		}
-// 		if (attrHash.size() > 0)
-// 			emit updateData(devices.key(device), attrHash);
-// 	} catch(Tango::DevFailed) {
-// 		std::cout << "dev failed" << std::endl;
-// 	}
-// }
 
 QTime t;
 void DataReceiver::push_event(Tango::DataReadyEventData *dred) {

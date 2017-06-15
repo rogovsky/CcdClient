@@ -27,6 +27,7 @@ public:
 signals:
     void play(QString);
     void pause(QString);
+	void setExposure(QString);
     void closeDevice(QString);
     void attributeChanged(QString, Tango::DeviceAttribute);
     void refresh(QString, QHash<QString, Tango::DeviceAttribute>);
@@ -39,6 +40,7 @@ public slots:
     void changeAttribute(QString, Tango::DeviceAttribute);
     void playProxy(QString devName) { emit play(devName); }
     void pauseProxy(QString devName) { emit pause(devName); }
+	void setExposureProxy(QString devName) { emit setExposure(devName); }
     void closeDeviceProxy(ImageWidget *widget);
 	void getFullImageSlot(ImageWidget*);
 	void saveFullImageToFile(QString devName, std::vector<unsigned char> data, int width, int height);

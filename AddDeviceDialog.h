@@ -27,6 +27,7 @@ signals:
 
 private:
     Ui::AddDeviceDialog *ui;
+	char *line = NULL;
 };
 
 #endif // ADDDEVICEDIALOG_H

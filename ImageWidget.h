@@ -7,10 +7,10 @@
 #include <tango.h>
 #include <QWindow>
 #include <QTime>
+#include <QMutex>
+
 #include "ChameleonPropertiesDialog.h"
 #include "DeviceType.h"
-
-#include <QMutex>
 
 #include <jpeglib.h>
 
@@ -66,6 +66,7 @@ signals:
 	void attributeChanged(QString devName, Tango::DeviceAttribute attribute);
     void play(QString);
     void pause(QString);
+	void setExposure(QString);
     void close(ImageWidget*);
 	void saveImage(ImageWidget*);
 
@@ -75,13 +76,14 @@ public slots:
     void showPropertiesDialog();
     void contextPlay();
     void contextPause();
+	void contextSetExposure();
     void contextClose();
 	void contextSaveImage();
 
     void showContextMenu(const QPoint&);
 
 private:
-    void paintEvent(QPaintEvent *e);
+	void paintEvent(QPaintEvent *e);
 
     int decodeJpeg(unsigned char *src, unsigned long src_size, unsigned char **buffer, int *size, int *width, int *height);
 

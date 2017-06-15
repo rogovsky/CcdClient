@@ -46,6 +46,7 @@ public:
 signals:
     void play(QString devName);
     void pause(QString devName);
+	void setExposure(QString devName);
     void closeDevice(QString devName);
 
     void addDevice(QString devName, DeviceType type);

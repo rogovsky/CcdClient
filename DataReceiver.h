@@ -1,20 +1,26 @@
 #ifndef DATARECEIVER_H
 #define DATARECEIVER_H
 
+
+#include <QThread>
 #include <QVector>
 #include <QString>
 #include <QHash>
-#include <QThread>
 #include <QMutex>
 #include <tango.h>
 #include "DeviceType.h"
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QErrorMessage>
 
 class DataReceiver : public QThread, public Tango::CallBack
 {
     Q_OBJECT
 private:
+	QObject *parent;
+
+	QErrorMessage* err = new QErrorMessage(NULL);
+
     QHash<QString, QHash<QString, Tango::DeviceAttribute>> data;
     QHash<QString, Tango::DeviceProxy*> devices;
 	QHash<QString, std::vector<std::string>> attrNames;
@@ -24,15 +30,7 @@ private:
     QMutex globalPlay;
 
     QMutex mutex;
-
-    bool running = true;
-    void run();
-
-
-
-
 public:
-//    void push_event(Tango::PipeEventData *ped);
     void push_event(Tango::DataReadyEventData *dred);
 
     explicit DataReceiver(QObject *parent = Q_NULLPTR);
@@ -59,6 +57,7 @@ public slots:
     void closeDevice(QString devName);//
     void play(QString devName);//
     void pause(QString devName);//
+	void setExposure(QString devName);
 	void setAttribute(QString devName, Tango::DeviceAttribute attribute);
 
 	void getFullImage(QString devName);

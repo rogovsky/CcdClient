@@ -62,7 +62,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     //connections DataReceiver <-> MainWindow
     connect(this, SIGNAL(play(QString)), dataReceiver, SLOT(play(QString)));
     connect(this, SIGNAL(pause(QString)), dataReceiver, SLOT(pause(QString)));
-    connect(this, SIGNAL(closeDevice(QString)), dataReceiver, SLOT(closeDevice(QString)));
+	connect(this, SIGNAL(setExposure(QString)), dataReceiver, SLOT(setExposure(QString)));
+	connect(this, SIGNAL(closeDevice(QString)), dataReceiver, SLOT(closeDevice(QString)));
 
     //connections DataReceiver <-> CentralWidget
     connect(dataReceiver, SIGNAL(addDeviceIsSuccessful(QString,DeviceType)),
@@ -71,6 +72,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
             centralWidget, SLOT(updateData(QString,QHash<QString,Tango::DeviceAttribute>)));
     connect(centralWidget, SIGNAL(play(QString)), dataReceiver, SLOT(play(QString)));
     connect(centralWidget, SIGNAL(pause(QString)), dataReceiver, SLOT(pause(QString)));
+	connect(centralWidget, SIGNAL(setExposure(QString)), dataReceiver, SLOT(setExposure(QString)));
     connect(centralWidget, SIGNAL(closeDevice(QString)), dataReceiver, SLOT(closeDevice(QString)));
     connect(centralWidget, SIGNAL(attributeChanged(QString,Tango::DeviceAttribute)),
             dataReceiver, SLOT(setAttribute(QString,Tango::DeviceAttribute)));
@@ -80,7 +82,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 }
 
 MainWindow::MainWindow(QString filestate, QWidget *parent) : QMainWindow(parent){
-
+	std::cout << filestate.toStdString() << std::endl;
 }
 
 MainWindow::~MainWindow() {
@@ -126,7 +128,7 @@ void MainWindow::toolBarSaveState() {
 }
 
 void MainWindow::toolBarProperties() {
-    std::cout << "properties()" << std::endl;
+	emit setExposure("");
 }
 
 void MainWindow::toolBarAbout() {
