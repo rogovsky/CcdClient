@@ -32,14 +32,15 @@ HEADERS += \
     centralwidget.h \
     mainwindow.h \
 
-LIBS += /usr/local/lib/libtango.so
-LIBS += /usr/lib/libomniORB4.so
-LIBS += /usr/lib/libomnithread.so
+LIBS += -L/usr/lib/x86_64-linux-gnu/
+LIBS += -ltango
+LIBS += -lomniORB4
+LIBS += -lomnithread
 LIBS += -L/usr/lib -ljpeg
 
-INCLUDEPATH += /usr//local/include/tango
-INCLUDEPATH += /usr/local/omniORB4
-INCLUDEPATH += /usr/local/omnithread
+INCLUDEPATH += /usr/include/tango
+INCLUDEPATH += /usr/include/omniORB4
+INCLUDEPATH += /usr/include/omnithread
 
 FORMS += \
     AddDeviceDialog.ui \
