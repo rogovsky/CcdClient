@@ -11,24 +11,26 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = CcdClient
 TEMPLATE = app
 
-SOURCES += main.cpp\
-	mainwindow.cpp \
-    centralwidget.cpp \
+SOURCES += \
+    DeviceType.cpp \
+    DataReceiver.cpp \
     mousepressableslider.cpp \
     AddDeviceDialog.cpp \
     ChameleonPropertiesDialog.cpp \
     ImageWidget.cpp \
-    DataReceiver.cpp \
-    DeviceType.cpp
+    centralwidget.cpp \
+    mainwindow.cpp \
+    main.cpp \
 
-HEADERS  += mainwindow.h \
-    centralwidget.h \
+HEADERS += \
+    DeviceType.h \
+    DataReceiver.h \
     mousepressableslider.h \
     AddDeviceDialog.h \
     ChameleonPropertiesDialog.h \
     ImageWidget.h \
-    DataReceiver.h \
-    DeviceType.h
+    centralwidget.h \
+    mainwindow.h \
 
 LIBS += /usr/local/lib/libtango.so
 LIBS += /usr/lib/libomniORB4.so
