@@ -1,12 +1,24 @@
 #
 #
 
+UI_DIR = .uic
+MOC_DIR = .moc
+RCC_DIR = .qrc
+OBJECTS_DIR = .obj
+
 TARGET = CcdClient
 TEMPLATE = app
 
 QT += core gui
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4) {
+    QT += widgets
+    INCLUDEPATH +=
+    LIBS +=
+} else {
+    INCLUDEPATH +=
+    LIBS +=
+}
 
 if ( 1 ) {
     CONFIG += link_pkgconfig
