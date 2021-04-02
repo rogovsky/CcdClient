@@ -32,15 +32,20 @@ HEADERS += \
     centralwidget.h \
     mainwindow.h \
 
-LIBS += -L/usr/lib/x86_64-linux-gnu/
-LIBS += -ltango
-LIBS += -lomniORB4
-LIBS += -lomnithread
-LIBS += -L/usr/lib -ljpeg
+if ( 1 ) {
+    CONFIG += link_pkgconfig
+    PKGCONFIG += tango libjpeg
+} else {
+    LIBS += -L/usr/lib/x86_64-linux-gnu/
+    LIBS += -ltango
+    LIBS += -lomniORB4
+    LIBS += -lomnithread
+    LIBS += -L/usr/lib -ljpeg
 
-INCLUDEPATH += /usr/include/tango
-INCLUDEPATH += /usr/include/omniORB4
-INCLUDEPATH += /usr/include/omnithread
+    INCLUDEPATH += /usr/include/tango
+    INCLUDEPATH += /usr/include/omniORB4
+    INCLUDEPATH += /usr/include/omnithread
+}
 
 FORMS += \
     AddDeviceDialog.ui \
