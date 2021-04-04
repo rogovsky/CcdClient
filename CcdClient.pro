@@ -9,6 +9,10 @@ OBJECTS_DIR = .obj
 TARGET = CcdClient
 TEMPLATE = app
 
+DEPENDPATH  += . src
+INCLUDEPATH += . src
+LIBS +=
+
 QT += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4) {
@@ -39,25 +43,25 @@ if ( 1 ) {
 }
 
 SOURCES += \
-    DeviceType.cpp \
-    DataReceiver.cpp \
-    mousepressableslider.cpp \
-    AddDeviceDialog.cpp \
-    ChameleonPropertiesDialog.cpp \
-    ImageWidget.cpp \
-    centralwidget.cpp \
-    mainwindow.cpp \
-    main.cpp \
+    src/DeviceType.cpp \
+    src/DataReceiver.cpp \
+    src/mousepressableslider.cpp \
+    src/AddDeviceDialog.cpp \
+    src/ChameleonPropertiesDialog.cpp \
+    src/ImageWidget.cpp \
+    src/centralwidget.cpp \
+    src/mainwindow.cpp \
+    src/main.cpp \
 
 HEADERS += \
-    DeviceType.h \
-    DataReceiver.h \
-    mousepressableslider.h \
-    AddDeviceDialog.h \
-    ChameleonPropertiesDialog.h \
-    ImageWidget.h \
-    centralwidget.h \
-    mainwindow.h \
+    src/DeviceType.h \
+    src/DataReceiver.h \
+    src/mousepressableslider.h \
+    src/AddDeviceDialog.h \
+    src/ChameleonPropertiesDialog.h \
+    src/ImageWidget.h \
+    src/centralwidget.h \
+    src/mainwindow.h \
 
 FORMS += \
     AddDeviceDialog.ui \
