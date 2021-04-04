@@ -5,7 +5,8 @@
 #include <QString>
 #include "DeviceType.h"
 
-namespace Ui {
+namespace Ui
+{
 class AddDeviceDialog;
 }
 
@@ -19,7 +20,6 @@ public:
 
 private slots:
     void on_buttonBox_accepted();
-
     void on_buttonBox_rejected();
 
 signals:
@@ -27,7 +27,7 @@ signals:
 
 private:
     Ui::AddDeviceDialog *ui;
-	char *line = NULL;
+    char *line = NULL;
 };
 
 #endif // ADDDEVICEDIALOG_H

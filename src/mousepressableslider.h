@@ -9,7 +9,6 @@ class MousePressableSlider : public QSlider
 public:
     MousePressableSlider(QWidget *parent);
     bool hasPressed();
-
     void setValue(int);
 
 protected:

@@ -7,7 +7,8 @@
 #include <tango.h>
 
 
-namespace Ui {
+namespace Ui
+{
 class ChameleonPropertiesDialog;
 }
 
@@ -27,7 +28,6 @@ public slots:
     void refreshData(QString devName, QHash<QString, Tango::DeviceAttribute>);
 
 private slots:
-
     void on_buttonBox_accepted();
 
     void on_buttonBox_rejected();
@@ -71,7 +71,6 @@ private slots:
     void on_shutterAuto_clicked(bool checked);
 
     void on_shutterOnePush_clicked(bool checked);
-
 
     void on_qualitySlider_sliderMoved(int position);
 

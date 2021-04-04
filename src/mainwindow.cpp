@@ -19,20 +19,24 @@
 #include <QTextStream>
 #include <QApplication>
 
-
 #include <tango.h>
 
-
-
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
+{
     if (this->objectName().isEmpty())
+    {
         this->setObjectName(QStringLiteral("MainWindow"));
+    }
     this->resize(640, 480);
+
     QIcon icon;
     QString iconThemeName = QStringLiteral("gtk2");
-    if (QIcon::hasThemeIcon(iconThemeName)) {
+    if (QIcon::hasThemeIcon(iconThemeName))
+    {
         icon = QIcon::fromTheme(iconThemeName);
-    } else {
+    }
+    else
+    {
         icon.addFile(QStringLiteral("."), QSize(), QIcon::Normal, QIcon::On);
     }
     this->setWindowIcon(icon);
@@ -48,114 +52,132 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     toolBar->addSeparator();
     toolBar->addAction(QPixmap(QStringLiteral(":/preferences_big.png")), "Properties", this, SLOT(toolBarProperties()));
     toolBar->addAction(QPixmap(QStringLiteral(":/about.png")), "About", this, SLOT(toolBarAbout()));
+
     spacer = new QWidget();
     spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     toolBar->addWidget(spacer);
+
     toolBar->addAction(QPixmap(QStringLiteral(":/exit.png")), "Exit", this, SLOT(exit()));
-
     this->addToolBar(Qt::TopToolBarArea, toolBar);
-
     centralWidget = new CentralWidget(this);
-
     this->setCentralWidget(centralWidget);
 
     this->retranslateUI();
 
     qRegisterMetaType<MyHashData>("QHash<QString,Tango::DeviceAttribute>");
-	qRegisterMetaType<TangoAttribute>("Tango::DeviceAttribute>");
-	qRegisterMetaType<DeviceType>("DeviceType");
+    qRegisterMetaType<TangoAttribute>("Tango::DeviceAttribute>");
+    qRegisterMetaType<DeviceType>("DeviceType");
 
-	dataReceiver = new DataReceiver(this);
-//	dataReceiverThread = new QThread();
-//	dataReceiver->moveToThread(dataReceiverThread);
+    dataReceiver = new DataReceiver(this);
+    //  dataReceiverThread = new QThread();
+    //  dataReceiver->moveToThread(dataReceiverThread);
+
     //connections DataReceiver <-> MainWindow
     connect(this, SIGNAL(play(QString)), dataReceiver, SLOT(play(QString)));
     connect(this, SIGNAL(pause(QString)), dataReceiver, SLOT(pause(QString)));
-	connect(this, SIGNAL(setExposure(QString)), dataReceiver, SLOT(setExposure(QString)));
-	connect(this, SIGNAL(closeDevice(QString)), dataReceiver, SLOT(closeDevice(QString)));
+    connect(this, SIGNAL(setExposure(QString)), dataReceiver, SLOT(setExposure(QString)));
+    connect(this, SIGNAL(closeDevice(QString)), dataReceiver, SLOT(closeDevice(QString)));
 
     //connections DataReceiver <-> CentralWidget
-    connect(dataReceiver, SIGNAL(addDeviceIsSuccessful(QString,DeviceType)),
-            centralWidget, SLOT(addImageWidget(QString,DeviceType)));
-    connect(dataReceiver, SIGNAL(updateData(QString,QHash<QString,Tango::DeviceAttribute>)),
-            centralWidget, SLOT(updateData(QString,QHash<QString,Tango::DeviceAttribute>)));
+    connect(dataReceiver, SIGNAL(addDeviceIsSuccessful(QString, DeviceType)),
+            centralWidget, SLOT(addImageWidget(QString, DeviceType)));
+    connect(dataReceiver, SIGNAL(updateData(QString, QHash<QString, Tango::DeviceAttribute>)),
+            centralWidget, SLOT(updateData(QString, QHash<QString, Tango::DeviceAttribute>)));
     connect(centralWidget, SIGNAL(play(QString)), dataReceiver, SLOT(play(QString)));
     connect(centralWidget, SIGNAL(pause(QString)), dataReceiver, SLOT(pause(QString)));
-	connect(centralWidget, SIGNAL(setExposure(QString)), dataReceiver, SLOT(setExposure(QString)));
+    connect(centralWidget, SIGNAL(setExposure(QString)), dataReceiver, SLOT(setExposure(QString)));
     connect(centralWidget, SIGNAL(closeDevice(QString)), dataReceiver, SLOT(closeDevice(QString)));
-    connect(centralWidget, SIGNAL(attributeChanged(QString,Tango::DeviceAttribute)),
-            dataReceiver, SLOT(setAttribute(QString,Tango::DeviceAttribute)));
-	connect(centralWidget, SIGNAL(getFullImage(QString)), dataReceiver, SLOT(getFullImage(QString)));
-	connect(dataReceiver, SIGNAL(getFullImage_done(QString,std::vector<unsigned char>,int,int)),
-			centralWidget, SLOT(receiveImage(QString,std::vector<unsigned char>,int,int)));
+    connect(centralWidget, SIGNAL(attributeChanged(QString, Tango::DeviceAttribute)),
+            dataReceiver, SLOT(setAttribute(QString, Tango::DeviceAttribute)));
+    connect(centralWidget, SIGNAL(getFullImage(QString)), dataReceiver, SLOT(getFullImage(QString)));
+    connect(dataReceiver, SIGNAL(getFullImage_done(QString, std::vector<unsigned char>, int, int)),
+            centralWidget, SLOT(receiveImage(QString, std::vector<unsigned char>, int, int)));
 }
 
-MainWindow::MainWindow(QString filestate, QWidget *parent) : QMainWindow(parent){
-	std::cout << filestate.toStdString() << std::endl;
+MainWindow::MainWindow(QString filestate, QWidget *parent) : QMainWindow(parent)
+{
+    std::cout << filestate.toStdString() << std::endl;
 }
 
-MainWindow::~MainWindow() {
+MainWindow::~MainWindow()
+{
     delete dataReceiver;
     delete centralWidget;
     delete toolBar;
 }
 
-void MainWindow::retranslateUI() {
+void MainWindow::retranslateUI()
+{
     this->setWindowTitle("Chameleon Tango Client");
 }
 
-
-void MainWindow::exit() {
+void MainWindow::exit()
+{
     std::cout << "exit()" << std::endl;
-	QApplication::quit();
+    QApplication::quit();
 }
 
-void MainWindow::toolBarAddDevice() {
+void MainWindow::toolBarAddDevice()
+{
     AddDeviceDialog dialog(this);
     connect(&dialog, SIGNAL(addDevice(QString, DeviceType)), dataReceiver, SLOT(addDevice(QString, DeviceType)));
     dialog.exec();
 }
 
-void MainWindow::toolBarOpenState() {
+void MainWindow::toolBarOpenState()
+{
     std::cout << "open()" << std::endl;
 }
 
-void MainWindow::toolBarSaveState() {
-	QJsonObject json = dataReceiver->getDeviceState("");
-	QJsonDocument doc(json);
+void MainWindow::toolBarSaveState()
+{
+    QJsonObject json = dataReceiver->getDeviceState("");
+    QJsonDocument doc(json);
 
-	QString fileName = QFileDialog::getSaveFileName(this, "Save state", "~/", tr("*.ccd (*.ccd)"));
+    QString fileName = QFileDialog::getSaveFileName(this, "Save state", "~/", tr("*.ccd (*.ccd)"));
 
-	if (fileName != "") {
-		if (!fileName.endsWith(".ccd"))
-			fileName.append(".ccd");
-		QFile file(fileName);
-		if (file.open(QIODevice::WriteOnly)) {
-			file.write(doc.toJson());
-		}
-	}
+    if (fileName != "")
+    {
+        if (!fileName.endsWith(".ccd"))
+        {
+            fileName.append(".ccd");
+        }
+
+        QFile file(fileName);
+
+        if (file.open(QIODevice::WriteOnly))
+        {
+            file.write(doc.toJson());
+        }
+    }
 }
 
-void MainWindow::toolBarProperties() {
-	emit setExposure("");
+void MainWindow::toolBarProperties()
+{
+    emit setExposure("");
 }
 
-void MainWindow::toolBarAbout() {
+void MainWindow::toolBarAbout()
+{
     std::cout << "about()" << std::endl;
 }
 
-void MainWindow::toolBarPlay() {
+void MainWindow::toolBarPlay()
+{
     emit play("");
 }
 
-void MainWindow::toolBarPause() {
+void MainWindow::toolBarPause()
+{
     emit pause("");
 }
 
-void MainWindow::toolBarClose() {
+void MainWindow::toolBarClose()
+{
     emit closeDevice("");
 }
 
-void MainWindow::resizeEvent(QResizeEvent *event) {
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
     QMainWindow::resizeEvent(event);
 }

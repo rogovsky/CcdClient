@@ -34,7 +34,7 @@ private:
     CentralWidget *centralWidget;
 
     DataReceiver *dataReceiver;
-	QThread *dataReceiverThread;
+    QThread *dataReceiverThread;
 
 public:
     MainWindow(QWidget *parent = 0);
@@ -46,7 +46,7 @@ public:
 signals:
     void play(QString devName);
     void pause(QString devName);
-	void setExposure(QString devName);
+    void setExposure(QString devName);
     void closeDevice(QString devName);
 
     void addDevice(QString devName, DeviceType type);
@@ -65,7 +65,6 @@ public slots:
     void toolBarClose();
 
     void resizeEvent(QResizeEvent *event);
-
 };
 
 Q_DECLARE_METATYPE(MyHashData)

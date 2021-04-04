@@ -4,7 +4,8 @@
 #include <vector>
 #include <string>
 
-enum DeviceType {
+enum DeviceType
+{
     CCD_Camera_Chameleon,
     CCD_Camera_BINP
 };
