@@ -23,12 +23,6 @@
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
-    if (this->objectName().isEmpty())
-    {
-        this->setObjectName(QStringLiteral("MainWindow"));
-    }
-    this->resize(640, 480);
-
     QIcon icon;
     QString iconThemeName = QStringLiteral("gtk2");
     if (QIcon::hasThemeIcon(iconThemeName))
