@@ -1,0 +1,3 @@
+[submodule "src/3rd_party/QJSON"]
+	path = src/3rd_party/QJSON
+	url = https://github.com/ziabary/QJSON.git
