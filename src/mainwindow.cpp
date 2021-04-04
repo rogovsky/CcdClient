@@ -23,18 +23,6 @@
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
-    QIcon icon;
-    QString iconThemeName = QStringLiteral("gtk2");
-    if (QIcon::hasThemeIcon(iconThemeName))
-    {
-        icon = QIcon::fromTheme(iconThemeName);
-    }
-    else
-    {
-        icon.addFile(QStringLiteral("."), QSize(), QIcon::Normal, QIcon::On);
-    }
-    this->setWindowIcon(icon);
-
     toolBar = new QToolBar("toolBar", this);
     toolBar->addAction(QPixmap(QStringLiteral(":/add")), "New device", this, SLOT(toolBarAddDevice()));
     toolBar->addAction(QPixmap(QStringLiteral(":/open.png")), "Open state", this, SLOT(toolBarOpenState()));

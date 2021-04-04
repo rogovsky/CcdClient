@@ -18,6 +18,19 @@ int main(int argc, char *argv[])
         mw.setObjectName(QStringLiteral("MainWindow"));
     }
     mw.resize(640, 480);
+
+    QIcon icon;
+    QString iconThemeName = QStringLiteral("gtk2");
+    if (QIcon::hasThemeIcon(iconThemeName))
+    {
+        icon = QIcon::fromTheme(iconThemeName);
+    }
+    else
+    {
+        icon.addFile(QStringLiteral("."), QSize(), QIcon::Normal, QIcon::On);
+    }
+    mw.setWindowIcon(icon);
+
     mw.show();
 
     return app.exec();
