@@ -38,20 +38,20 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     this->setWindowIcon(icon);
 
     toolBar = new QToolBar("toolBar", this);
-    toolBar->addAction(QPixmap(QStringLiteral("/usr/share/icons/gnome/48x48/actions/add.png")), "New device", this, SLOT(toolBarAddDevice()));
-    toolBar->addAction(QPixmap(QStringLiteral("/usr/share/icons/gnome/24x24/actions/document-open.png")), "Open state", this, SLOT(toolBarOpenState()));
-    toolBar->addAction(QPixmap(QStringLiteral("/usr/share/icons/gnome/24x24/actions/document-save.png")), "Save state", this, SLOT(toolBarSaveState()));
+    toolBar->addAction(QPixmap(QStringLiteral(":/add")), "New device", this, SLOT(toolBarAddDevice()));
+    toolBar->addAction(QPixmap(QStringLiteral(":/open.png")), "Open state", this, SLOT(toolBarOpenState()));
+    toolBar->addAction(QPixmap(QStringLiteral(":/save.png")), "Save state", this, SLOT(toolBarSaveState()));
     toolBar->addSeparator();
-    toolBar->addAction(QPixmap(QStringLiteral("/usr/share/icons/gnome/24x24/actions/player_play.png")), "Play", this, SLOT(toolBarPlay()));
-    toolBar->addAction(QPixmap(QStringLiteral("/usr/share/icons/gnome/24x24/actions/player_pause.png")), "Pause", this, SLOT(toolBarPause()));
-    toolBar->addAction(QPixmap(QStringLiteral("/usr/share/icons/gnome/24x24/actions/player_stop.png")), "Close", this, SLOT(toolBarClose()));
+    toolBar->addAction(QPixmap(QStringLiteral(":/play.png")), "Play", this, SLOT(toolBarPlay()));
+    toolBar->addAction(QPixmap(QStringLiteral(":/pause.png")), "Pause", this, SLOT(toolBarPause()));
+    toolBar->addAction(QPixmap(QStringLiteral(":/stop.png")), "Close", this, SLOT(toolBarClose()));
     toolBar->addSeparator();
-    toolBar->addAction(QPixmap(QStringLiteral("/usr/share/icons/gnome/256x256/categories/preferences-system.png")), "Properties", this, SLOT(toolBarProperties()));
-    toolBar->addAction(QPixmap(QStringLiteral("/usr/share/icons/gnome/24x24/actions/help-about.png")), "About", this, SLOT(toolBarAbout()));
+    toolBar->addAction(QPixmap(QStringLiteral(":/preferences_big.png")), "Properties", this, SLOT(toolBarProperties()));
+    toolBar->addAction(QPixmap(QStringLiteral(":/about.png")), "About", this, SLOT(toolBarAbout()));
     spacer = new QWidget();
     spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     toolBar->addWidget(spacer);
-    toolBar->addAction(QPixmap(QStringLiteral("/usr/share/icons/gnome/24x24/actions/application-exit.png")), "Exit", this, SLOT(exit()));
+    toolBar->addAction(QPixmap(QStringLiteral(":/exit.png")), "Exit", this, SLOT(exit()));
 
     this->addToolBar(Qt::TopToolBarArea, toolBar);
 

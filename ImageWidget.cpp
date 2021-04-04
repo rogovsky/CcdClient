@@ -241,18 +241,18 @@ void ImageWidget::showContextMenu(const QPoint& pos) {
 
     QMenu menu;
 
-	menu.addAction(QPixmap(QStringLiteral("/usr/share/icons/gnome/256x256/mimetypes/image.png")), "Save image", this, SLOT(contextSaveImage()));
+       menu.addAction(QPixmap(QStringLiteral(":/image.png")), "Save image", this, SLOT(contextSaveImage()));
 
 	if (!played)
-        menu.addAction(QPixmap(QStringLiteral("/usr/share/icons/gnome/24x24/actions/player_play.png")), "Play", this, SLOT(contextPlay()));
+        menu.addAction(QPixmap(QStringLiteral(":/play.png")), "Play", this, SLOT(contextPlay()));
     else
-        menu.addAction(QPixmap(QStringLiteral("/usr/share/icons/gnome/24x24/actions/player_pause.png")), "Pause", this, SLOT(contextPause()));
+        menu.addAction(QPixmap(QStringLiteral(":/pause.png")), "Pause", this, SLOT(contextPause()));
 
-	menu.addAction(QPixmap(QStringLiteral("/usr/share/icons/gnome/24x24/categories/preferences-system.png")), "Set exposure", this, SLOT(contextSetExposure()));
+       menu.addAction(QPixmap(QStringLiteral(":/preferences.png")), "Set exposure", this, SLOT(contextSetExposure()));
 
-    menu.addAction(QPixmap(QStringLiteral("/usr/share/icons/gnome/24x24/actions/edit-delete.png")), "Close device", this, SLOT(contextClose()));
+    menu.addAction(QPixmap(QStringLiteral(":/delete.png")), "Close device", this, SLOT(contextClose()));
 
-    menu.addAction(QPixmap(QStringLiteral("/usr/share/icons/gnome/256x256/categories/preferences-system.png")), "Properties", this, SLOT(showPropertiesDialog()));
+    menu.addAction(QPixmap(QStringLiteral(":/preferences_big.png")), "Properties", this, SLOT(showPropertiesDialog()));
 
     menu.exec(globalPos);
 }
