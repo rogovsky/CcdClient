@@ -33,8 +33,8 @@ private:
 public:
     void push_event(Tango::DataReadyEventData *dred);
 
-    explicit DataReceiver(QObject *parent = Q_NULLPTR);
-    explicit DataReceiver(QVector<QString> devNames, QObject *parent = Q_NULLPTR);
+    explicit DataReceiver(QObject *parent = NULL);
+    explicit DataReceiver(QVector<QString> devNames, QObject *parent = NULL);
 
     ~DataReceiver();
 
