@@ -8,6 +8,7 @@ OBJECTS_DIR = .obj
 
 TARGET = CcdClient
 TEMPLATE = app
+VERSION = 1.0
 
 DEPENDPATH  += . src
 INCLUDEPATH += . src
