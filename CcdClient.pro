@@ -64,3 +64,6 @@ FORMS += \
     ChameleonPropertiesDialog.ui \
     ImageWidget.ui \
     CentralWidget.ui
+
+RESOURCES += \
+    etc/resources/ccdclient.qrc

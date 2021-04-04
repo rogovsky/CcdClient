@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="exit.png">icons/24x24/actions/application-exit.png</file>
+        <file alias="open.png">icons/24x24/actions/document-open.png</file>
+        <file alias="save.png">icons/24x24/actions/document-save.png</file>
+        <file alias="delete.png">icons/24x24/actions/edit-delete.png</file>
+        <file alias="about.png">icons/24x24/actions/help-about.png</file>
+        <file alias="pause.png">icons/24x24/actions/player_pause.png</file>
+        <file alias="play.png">icons/24x24/actions/player_play.png</file>
+        <file alias="stop.png">icons/24x24/actions/player_stop.png</file>
+        <file alias="preferences.png">icons/24x24/categories/preferences-system.png</file>
+        <file alias="preferences_big.png">icons/256x256/categories/preferences-system.png</file>
+        <file alias="image.png">icons/256x256/mimetypes/image.png</file>
+        <file alias="add.png">icons/48x48/actions/add.png</file>
+    </qresource>
+</RCC>
