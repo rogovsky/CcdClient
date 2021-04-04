@@ -18,6 +18,9 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 } else {
     INCLUDEPATH +=
     LIBS +=
+
+    #CONFIG += c++11
+    include( src/3rd_party/qjson.pri )
 }
 
 if ( 1 ) {

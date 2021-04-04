@@ -9,8 +9,13 @@
 #include <QMutex>
 #include <tango.h>
 #include "DeviceType.h"
-#include <QJsonObject>
-#include <QJsonArray>
+#if QT_VERSION >= 0x050000
+    #include <QJsonObject>
+    #include <QJsonArray>
+#else
+    #include <JSONObject.h>
+    #include <JSONArray.h>
+#endif
 #include <QErrorMessage>
 
 class DataReceiver : public QThread, public Tango::CallBack

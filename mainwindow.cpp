@@ -2,11 +2,14 @@
 #include <iostream>
 #include <QDialog>
 #include "AddDeviceDialog.h"
-#include <QJsonObject>
-#include <QJsonDocument>
 
 #if QT_VERSION >= 0x050000
+    #include <QJsonObject>
+    #include <QJsonDocument>
 #else
+    #include <JSONObject.h>
+    #include <JSONDocument.h>
+
     #define QStringLiteral(str) QString::fromUtf8("" str "", sizeof(str) - 1)
 #endif
 
