@@ -11,6 +11,11 @@
 #include <iostream>
 #include <fstream>
 
+#if QT_VERSION >= 0x050000
+#else
+    #define QStringLiteral(str) QString::fromUtf8("" str "", sizeof(str) - 1)
+#endif
+
 using namespace Tango;
 
 

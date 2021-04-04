@@ -4,6 +4,12 @@
 #include "AddDeviceDialog.h"
 #include <QJsonObject>
 #include <QJsonDocument>
+
+#if QT_VERSION >= 0x050000
+#else
+    #define QStringLiteral(str) QString::fromUtf8("" str "", sizeof(str) - 1)
+#endif
+
 #include <QFile>
 #include <QFileDialog>
 #include <QIODevice>
