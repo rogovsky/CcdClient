@@ -64,10 +64,10 @@ HEADERS += \
     src/mainwindow.h \
 
 FORMS += \
-    AddDeviceDialog.ui \
-    ChameleonPropertiesDialog.ui \
-    ImageWidget.ui \
-    CentralWidget.ui
+    src/ui/AddDeviceDialog.ui \
+    src/ui/ChameleonPropertiesDialog.ui \
+    src/ui/ImageWidget.ui \
+    src/ui/CentralWidget.ui
 
 RESOURCES += \
     etc/resources/ccdclient.qrc
