@@ -5,7 +5,7 @@
 #include <QMouseEvent>
 #include <QHash>
 #include <tango.h>
-#include <QWindow>
+//#include <QWindow>
 #include <QTime>
 #include <QMutex>
 
