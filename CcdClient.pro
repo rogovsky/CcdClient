@@ -71,3 +71,25 @@ FORMS += \
 
 RESOURCES += \
     etc/resources/ccdclient.qrc
+
+OTHER_FILES += \
+    src/3rd_party/README.md \
+    README.md \
+
+ICON_FILES += \
+    etc/resources/icons/24x24/actions/application-exit.png \
+    etc/resources/icons/24x24/actions/document-open.png \
+    etc/resources/icons/24x24/actions/document-save.png \
+    etc/resources/icons/24x24/actions/edit-delete.png \
+    etc/resources/icons/24x24/actions/help-about.png \
+    etc/resources/icons/24x24/actions/player_pause.png \
+    etc/resources/icons/24x24/actions/player_play.png \
+    etc/resources/icons/24x24/actions/player_stop.png \
+    etc/resources/icons/24x24/categories/preferences-system.png \
+    etc/resources/icons/256x256/categories/preferences-system.png \
+    etc/resources/icons/256x256/mimetypes/image.png \
+    etc/resources/icons/48x48/actions/add.png \
+
+DISTFILES += \
+    $$OTHER_FILES \
+    $$ICON_FILES \
